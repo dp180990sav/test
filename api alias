@@ -1,0 +1,187 @@
+[
+    {
+        "id": "f6e8047b4a668550",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e5e0a42a08b3af1f",
+        "type": "http in",
+        "z": "f6e8047b4a668550",
+        "name": "",
+        "url": "/transf_phone_bot",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "2401b57e25f0eaca",
+                "a45ae3be99c6436b",
+                "5dde3b5719bb6f52"
+            ]
+        ]
+    },
+    {
+        "id": "22a55fcbb2e0bd7d",
+        "type": "inject",
+        "z": "f6e8047b4a668550",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 80,
+        "wires": [
+            [
+                "50e062d8121194ce"
+            ]
+        ]
+    },
+    {
+        "id": "50e062d8121194ce",
+        "type": "http request",
+        "z": "f6e8047b4a668550",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.telegram.org/bot5949499950:AAFvPwEQwOBY5bFbtYVVRV0BCNlcGsqvtlM/setWebhook?url=https://c4e0-185-183-93-206.eu.ngrok.io/transf_phone_bot",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 290,
+        "y": 80,
+        "wires": [
+            [
+                "d70dd52923ac828c"
+            ]
+        ]
+    },
+    {
+        "id": "d70dd52923ac828c",
+        "type": "debug",
+        "z": "f6e8047b4a668550",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "2401b57e25f0eaca",
+        "type": "debug",
+        "z": "f6e8047b4a668550",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "a45ae3be99c6436b",
+        "type": "http response",
+        "z": "f6e8047b4a668550",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 280,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5dde3b5719bb6f52",
+        "type": "function",
+        "z": "f6e8047b4a668550",
+        "name": "function 1",
+        "func": "msg.chat_id = msg.payload.message.from.id;\nmsg.text = msg.payload.message.text;\nmsg.method = \"POST\";\nmsg.url = \"https://api.telegram.org/bot5949499950:AAFvPwEQwOBY5bFbtYVVRV0BCNlcGsqvtlM/sendMessage\";\n\nif (msg.text === \"/start\" || msg.text === \"Return to the main menu\"){\n  msg.payload = {\n    \"text\": \"Hello! Select the required menu\",\n    \"reply_markup\": {\n      \"keyboard\": [[\"Get api Visa Alias url\"]],\n      \"resize_keyboard\": true,\n      \"one_time_keyboard\": false\n    },\n    \"chat_id\": msg.chat_id\n  }\n}\nelse if (msg.text === \"Get api Visa Alias url\"){\n  msg.payload = {\n    \"text\": \"What api is needed?\",\n    \"reply_markup\": {\n      \"keyboard\": [[\"Create Alias\"], [\"Update Alias\"], [\"Delete Alias\"], [\"Get Alias\"], [\"Resolve V2\"], [\"Return to the main menu\"]],\n      \"resize_keyboard\": true,\n      \"one_time_keyboard\": false\n    },\n    \"chat_id\": msg.chat_id\n  }\n}\nelse if (msg.text === \"Create Alias\" || msg.text === \"Update Alias\" || msg.text === \"Delete Alias\" || msg.text === \"Get Alias\" || msg.text === \"Resolve V2\") {\n  if (msg.text === \"Create Alias\"){\n    msg.api_name = \"Create Alias\";\n    msg.api_url = \"https://sandbox.api.visa.com/visaaliasdirectory/v1/manage/createalias\";\n  }\n  else if (msg.text === \"Update Alias\"){\n    msg.api_name = \"Update Alias\";\n    msg.api_url = \"https://sandbox.api.visa.com/visaaliasdirectory/v1/manage/updatealias\";\n  }\n  else if (msg.text === \"Delete Alias\") {\n    msg.api_name = \"Delete Alias\";\n    msg.api_url = \"https://sandbox.api.visa.com/visaaliasdirectory/v1/manage/deletealias\";\n  }\n  else if (msg.text === \"Get Alias\") {\n    msg.api_name = \"Get Alias\";\n    msg.api_url = \"https://sandbox.api.visa.com/visaaliasdirectory/v1/manage/getalias\";\n  }\n  else if (msg.text === \"Resolve V2\") {\n    msg.api_name = \"Resolve V2\";\n    msg.api_url = \"https://sandbox.api.visa.com/visaaliasdirectory/v2/resolve\";\n  }\n  msg.payload = {\n    \"text\": `API name: ${msg.api_name}\nmethod: POST\nURL: ${msg.api_url}`,\n    \"reply_markup\": {\n      \"keyboard\": [[\"Create Alias\"], [\"Update Alias\"], [\"Delete Alias\"], [\"Get Alias\"], [\"Resolve V2\"], [\"Return to the main menu\"]],\n      \"resize_keyboard\": true,\n      \"one_time_keyboard\": false\n    },\n    \"chat_id\": msg.chat_id\n  }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 240,
+        "wires": [
+            [
+                "fe49332bf7beee63"
+            ]
+        ]
+    },
+    {
+        "id": "fe49332bf7beee63",
+        "type": "http request",
+        "z": "f6e8047b4a668550",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 240,
+        "wires": [
+            [
+                "635e95e8c1d7b327"
+            ]
+        ]
+    },
+    {
+        "id": "635e95e8c1d7b327",
+        "type": "debug",
+        "z": "f6e8047b4a668550",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 240,
+        "wires": []
+    }
+]
